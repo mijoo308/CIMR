@@ -1,4 +1,4 @@
 # CIMR
-Crop big Image and Merge detection Results . A tool for object detection.
+### : Crop big Image and Merge detected Results (A tool for text or object detection)
 
 now creating README
