@@ -4,8 +4,8 @@ import time
 
 
 # set CIMR parameter --------------------
-CIMR.sizeForCrop = 2000
-CIMR.sizeForStride = 1000
+CIMR.crop_size = 2000
+CIMR.stride_size = 1000
 CIMR.margin_to_include = 2
 symbol_to_split_result = ','
 
@@ -15,26 +15,19 @@ setDate = time.localtime()
 #-----------------------------------------
 
 
-# time_info = str(setDate.tm_year) + (str(setDate.tm_mon)).zfill(2) + \
-#             (str(setDate.tm_mday)).zfill(2) + '_' + (str(setDate.tm_hour)).zfill(2) + '.' \
-#             + (str(setDate.tm_min)).zfill(2) + '_'
-# result_dir_for_each_test = result_dir + '/' + time_info
-# os.mkdir(result_dir_for_each_test)
-
-
 print("Cropping...")
 original_img_list = []
 CIMR.crop_big_image(result_dir, img_dir)
-resized_img_list = []
+
 
 sub_txt_result_dir_List = []  # to merge the result
 
 print("Detecting...")
 
 for foldername in os.listdir(img_dir):  # ./data
-    subImgDir = os.path.join(img_dir, foldername)
+    sub_img_dir = os.path.join(img_dir, foldername)
 
-    if os.path.isdir(subImgDir):
+    if os.path.isdir(sub_img_dir):
 
         sub_txt_result_dir = os.path.join(result_dir, foldername + '_txt')
         sub_img_result_dir = os.path.join(result_dir, foldername)
@@ -42,12 +35,12 @@ for foldername in os.listdir(img_dir):  # ./data
 
         os.mkdir(sub_txt_result_dir)
 
-        for file in os.listdir(subImgDir):  # per subImg
+        for file in os.listdir(sub_img_dir):  # per subImg
 
-            full_cropped_img_file_path = os.path.join(subImgDir, file)
+            full_cropped_img_file_path = os.path.join(sub_img_dir, file)
             cropped_img_name = os.path.basename(full_cropped_img_file_path)
             cropped_img_name = str(cropped_img_name.split('.')[0])
-            fullCropTxtFilePath = os.path.join(sub_txt_result_dir, cropped_img_name + ".txt")
+            full_crop_txt_file_path = os.path.join(sub_txt_result_dir, cropped_img_name + ".txt")
 
 
             '''
@@ -55,24 +48,22 @@ for foldername in os.listdir(img_dir):  # ./data
             Run your detection engine
             '''
 
-    else:  # 그냥 도면 원본파일
-        original_img_list.append(subImgDir)
+    else:
+        original_img_list.append(sub_img_dir)
 
-# --- merge ---------------------------
 print("Merging detected boxes...")
 for sub_txt_result_dir in sub_txt_result_dir_List:
     CIMR.merge_result(sub_txt_result_dir, result_dir)
 
-# -- recognize --------------------------
 print("Recognizing...")
 merged_text_list = []
 for file in os.listdir(result_dir):
     if file.endswith(".txt"):
         merged_text_list.append(os.path.join(result_dir, file))
 
-for merged_text_path, resizedIm in zip(merged_text_list, resized_img_list):
+for merged_text_path, resizedIm in zip(merged_text_list, original_img_list):
     '''
 
-    Run your detection engine
+    Run your recognition engine
     '''
 
