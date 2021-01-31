@@ -1,27 +1,14 @@
 import cv2
 import os
-import PIL
-from PIL import ImageDraw, ImageFont, Image
 
 #--------Param--------
-#
-# drawing_path = '' #
-crop_size = 2000
-stride_size = 1000
-#
-# result_path = ''
-# origin_width = 9933
-# origin_height = 7016
 
+crop_size = 2000  # crop size should be bigger than the maximum size of string
+stride_size = 1000
 
 margin_to_include = 2  # margin to include in results
 symbol_to_split_result = ','  # detection result format would be xmin,ymin,xmax,ymax
 #---------------------
-
-# def resizeBigImg(src):
-#     resizedImg = src.Image.resize((6622, 4677))
-#     return resizedImg
-
 
 def getXposYpos(width, height):
     x_pos_list = []
@@ -104,7 +91,7 @@ def crop_big_image(result_root, dirname): # drawing_path
             cv2.imwrite(os.path.join(result_root, imgName + ".jpg"), drawing)
 
 
-def mergeResult(dir, resultRoot): #per img
+def merge_result(dir, resultRoot): #per img
 
     txtNames_withExt = os.listdir(dir)
 
@@ -196,42 +183,7 @@ def mergeResult(dir, resultRoot): #per img
 
     f_write.close()
 
-#
-# def return_to_original_size(exceptXpos, exceptYpos, txt_dir, outpath):
-#     basename = os.path.basename(txt_dir)
-#     txt_name = str(basename.split('_')[0])
-#     filename_to_save = os.path.join(outpath, txt_name + "_origin_result.txt")
-#
-#     f_to_read = open(txt_dir, 'r', encoding='UTF8')
-#     lines = f_to_read.readlines()
-#     f_to_read.close()
-#
-#     f_to_write = open(filename_to_save, 'w', encoding='UTF8')
-#     for line in lines:
-#         parsed_box = line.split('ㅣ')
-#         resized_xmin = int(parsed_box[0])
-#         resized_ymin = int(parsed_box[1])
-#         resized_xmax = int(parsed_box[2])
-#         resized_ymax = int(parsed_box[3])
-#         Tstring = parsed_box[4]
-#         orientation = parsed_box[5]
-#         confidence = parsed_box[6]
-#
-#         #
-#         # origin_xmin = int(resized_xmin*3/2)
-#         # origin_ymin = int(resized_ymin*3/2)
-#         # origin_xmax = int(resized_xmax*3/2)
-#         # origin_ymax = int(resized_ymax*3/2)
-#         #
-#
-#         if not(origin_xmax > exceptXpos and origin_ymax > exceptYpos):
-#             data = str(origin_xmin) + "ㅣ" + str(origin_ymin) + "ㅣ" + str(origin_xmax) + "ㅣ" + str(origin_ymax) + "ㅣ" + Tstring + "ㅣ" + orientation + 'ㅣ' + confidence
-#             f_to_write.write(data)
-#         # data = str(origin_xmin) + "ㅣ" + str(origin_ymin) + "ㅣ" + str(origin_xmax) + "ㅣ" + str(
-#         #     origin_ymax) + "ㅣ" + Tstring + "ㅣ" + orientation + 'ㅣ' + confidence
-#         # f_to_write.write(data)
-#
-#     f_to_write.close()
+
 
 
 
